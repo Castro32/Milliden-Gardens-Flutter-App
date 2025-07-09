@@ -1,0 +1,36 @@
+name: milliden_app
+description: "A new Flutter project."
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  carousel_slider: ^5.1.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - lib/assets/images/Logo.jpeg
+    - lib/assets/images/o1.jpeg
+    - lib/assets/images/l6.jpeg
+    - lib/assets/images/r1.jpeg
+    - lib/assets/images/lawn1.jpeg
+    - lib/assets/images/bake.png
+    - lib/assets/images/g7.jpeg
+
+
+      
