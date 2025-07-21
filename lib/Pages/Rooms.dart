@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:milliden_app/component/navbar.dart';
 
-class AboutUs extends StatelessWidget {
-  const AboutUs({super.key});
+class Rooms extends StatelessWidget {
+  const Rooms({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(
-        onTap: () {
-          Navigator.pop(context); // Navigate back when the app bar is tapped
-        },
-      ),
+      appBar: CustomAppBar(),
       endDrawer: const CustomDrawer(),
       body: Container(
         color: Colors.amber[500],
         child: Center(
           child: Text(
-            'About Us Page',
+            'Rooms Page',
             style: TextStyle(fontSize: 24, color: Colors.white),
           ),
         ),
