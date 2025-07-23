@@ -10,15 +10,38 @@ class Gallery extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(),
       endDrawer: const CustomDrawer(),
-      body: Container(
-        color: Colors.amber[500],
-        child: Center(
-          child: Text(
-            'Gallery Page',
-            style: TextStyle(fontSize: 24, color: Colors.white),
+      body: Stack(
+        children: [
+          Container(
+            child: Image.asset(
+              "lib/assets/images/lawn1.jpeg",
+              width: double.infinity,
+              height: 300,
+              fit: BoxFit.cover,
+            ),
           ),
-        ),
-      ),
+          Container(
+            alignment: Alignment.center,
+            height: 300,
+            child: Text(
+              'Gallery',
+              style: TextStyle(color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            )
+          ),
+          Container(
+            alignment: Alignment.center,
+            height: 350,
+            child: Text(
+              'Explore Our Beautiful Gallery',
+              style: TextStyle(color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 22.0),
+            )
+          ),
+        ],
+      )
     );
   }
 }

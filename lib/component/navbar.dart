@@ -4,7 +4,6 @@ import 'package:milliden_app/Pages/Contact.dart';
 import 'package:milliden_app/Pages/Gallery.dart';
 import 'package:milliden_app/Pages/Rooms.dart';
 import 'package:milliden_app/Pages/home.dart';
-import 'package:milliden_app/component/main_layout.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final void Function()? onTap;
