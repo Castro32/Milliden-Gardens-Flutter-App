@@ -14,7 +14,7 @@ class Gallery extends StatelessWidget {
         children: [
           Container(
             child: Image.asset(
-              "lib/assets/images/lawn1.jpeg",
+              "lib/assets/images/i3.png",
               width: double.infinity,
               height: 300,
               fit: BoxFit.cover,
@@ -34,10 +34,10 @@ class Gallery extends StatelessWidget {
             alignment: Alignment.center,
             height: 350,
             child: Text(
-              'Explore Our Beautiful Gallery',
+              'Discover the beauty and experiences at Milliden Gardens',
               style: TextStyle(color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22.0),
+                  fontSize: 18.0),
             )
           ),
         ],

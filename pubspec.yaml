@@ -31,6 +31,10 @@ flutter:
     - lib/assets/images/lawn1.jpeg
     - lib/assets/images/bake.png
     - lib/assets/images/g7.jpeg
+    - lib/assets/images/r1.png
+    - lib/assets/images/i3.png
+    - lib/assets/images/i2.png
+    - lib/assets/images/i1.png
 
 
       

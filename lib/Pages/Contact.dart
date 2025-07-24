@@ -33,10 +33,10 @@ class Contact extends StatelessWidget {
             alignment: Alignment.center,
             height: 350,
             child: Text(
-              'Get in Touch with Us',
+              'Need Assistance? Contact Our Support Team',
               style: TextStyle(color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22.0),
+                  fontSize: 18.0),
             )
           ),
         ],

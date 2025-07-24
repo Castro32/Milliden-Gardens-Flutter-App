@@ -13,7 +13,7 @@ class Rooms extends StatelessWidget {
         children: [
           Container(
             child: Image.asset(
-              "lib/assets/images/lawn1.jpeg",
+              "lib/assets/images/r1.png",
               width: double.infinity,
               height: 300,
               fit: BoxFit.cover,
@@ -36,7 +36,7 @@ class Rooms extends StatelessWidget {
               'Explore Our Comfortable Rooms',
               style: TextStyle(color: Colors.white,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22.0),
+                  fontSize: 18.0),
             )
           ),
         ],
