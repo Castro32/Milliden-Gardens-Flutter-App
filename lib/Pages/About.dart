@@ -110,7 +110,7 @@ class AboutUs extends StatelessWidget {
                   Container(
                     height: 300,
                     width: double.infinity,
-                    color: Colors.black.withOpacity(0.3), // Optional: Add overlay for better text readability
+                    color: Colors.black.withOpacity(0.3), 
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
