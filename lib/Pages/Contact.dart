@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:milliden_app/component/navbar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 
 class Contact extends StatelessWidget {
   const Contact({super.key});
@@ -328,24 +328,40 @@ class Contact extends StatelessWidget {
                           Row(
                             children: [
                               IconButton(
-                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                 icon: FaIcon(FontAwesomeIcons.instagram), 
-                                onPressed: () { print("Pressed"); }
+                                onPressed: () async {
+                                  final Uri url = Uri.parse('https://www.instagram.com/milliden_gardens?igsh=NTc4MTIwNjQ2YQ==');
+                                  if (!await launchUrl(url)) {
+                                    throw 'Could not launch $url';
+                                  }
+                                },  
                               ),
                               IconButton(
-                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                 icon: FaIcon(FontAwesomeIcons.facebook), 
-                                onPressed: () { print("Pressed"); }
+                                onPressed: () async {
+                                  final Uri url = Uri.parse("https://www.facebook.com/p/Milliden-Gardens-61555924461081/");
+                                  if (!await launchUrl(url)) {
+                                    throw 'Could not launch $url';
+                                  }
+                                },
                               ),
                               IconButton(
-                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                 icon: FaIcon(FontAwesomeIcons.tiktok), 
-                                onPressed: () { print("Pressed"); }
+                                onPressed: () async {
+                                  final Uri url = Uri.parse("https://www.tiktok.com/@millidengardens");
+                                  if (!await launchUrl(url)) {
+                                    throw 'Could not launch $url';
+                                  }
+                                },
                               ),
                               IconButton(
-                                // Use the FaIcon Widget + FontAwesomeIcons class for the IconData
                                 icon: FaIcon(FontAwesomeIcons.whatsapp), 
-                                onPressed: () { print("Pressed"); }
+                                onPressed: () async {
+                                  final Uri url = Uri.parse("https://wa.me/254753755016");
+                                  if (!await launchUrl(url)) {
+                                    throw 'Could not launch $url';
+                                  }
+                                }
                               ),
                             ],
                           ),
