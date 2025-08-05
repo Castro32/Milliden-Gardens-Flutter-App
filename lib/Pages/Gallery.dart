@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:flutter/material.dart';
 import 'package:milliden_app/component/navbar.dart';
 
@@ -12,6 +11,7 @@ class Gallery extends StatelessWidget {
       endDrawer: const CustomDrawer(),
       body: Stack(
         children: [
+          // ignore: avoid_unnecessary_containers
           Container(
             child: Image.asset(
               "lib/assets/images/i3.png",
