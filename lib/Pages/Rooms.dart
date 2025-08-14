@@ -499,7 +499,7 @@ class _RoomsState extends State<Rooms> {
               children: [
                 // Image gallery
                 if (room.imageUrls.isNotEmpty)
-                  Container(
+                  SizedBox(
                     height: 200,
                     child: PageView.builder(
                       itemCount: room.imageUrls.length,
