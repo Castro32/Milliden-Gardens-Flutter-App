@@ -104,7 +104,7 @@ class Gallery extends StatelessWidget {
       body: Column(
         children: [
           // Header section with background image and text
-          Container(
+          SizedBox(
             height: 300,
             width: double.infinity,
             child: Stack(

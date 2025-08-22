@@ -19,6 +19,9 @@ dependencies:
   url_launcher: ^6.0.0
   mongo_dart: ^0.10.5
   http: ^1.4.0
+  flutter_map: 7.0.0
+  latlong2: 0.9.1
+  webview_flutter: ^4.4.2
   
   
 
