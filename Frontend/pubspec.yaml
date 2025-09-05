@@ -6,7 +6,8 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ">=3.0.0 <4.0.0"
+  
 
 dependencies:
   flutter:
@@ -17,9 +18,9 @@ dependencies:
   flutter_social_button: ^1.1.6+1
   font_awesome_flutter: ^10.7.0
   url_launcher: ^6.0.0
-  mongo_dart: ^0.10.5
-  http: ^1.4.0
-  flutter_map: 7.0.0
+  http: ^1.5.0
+  flutter_map: ^8.2.1
+  dwds: ^25.1.0
   latlong2: 0.9.1
   webview_flutter: ^4.4.2
   
@@ -30,7 +31,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true

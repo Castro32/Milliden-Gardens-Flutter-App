@@ -172,22 +172,23 @@ class _RoomsState extends State<Rooms> {
         final data = json.decode(response.body);
         List<Room> fetchedRooms = [];
         
-        // Handle the specific API response structure
         if (data is Map<String, dynamic> && 
             data['success'] == true && 
             data['data'] != null && 
             data['data'] is List) {
-          
-          fetchedRooms = (data['data'] as List).map((roomJson) {
+
+          fetchedRooms = (data['data'] as List).map<Room?>((roomJson) {
             try {
               return Room.fromJson(roomJson as Map<String, dynamic>);
             } catch (e) {
               print('Error parsing room: $e');
               print('Room data: $roomJson');
-              return null;
+              return null; // nullable return allowed
             }
-          }).where((room) => room != null).cast<Room>().toList();
-        }
+          }).whereType<Room>() // keeps only non-null
+            .toList();
+          }
+
 
         setState(() {
           rooms = fetchedRooms;
@@ -214,7 +215,6 @@ class _RoomsState extends State<Rooms> {
       endDrawer: const CustomDrawer(),
       body: Column(
         children: [
-          // Header section with background image
           Stack(
             children: [
               Container(

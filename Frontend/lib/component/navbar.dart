@@ -423,6 +423,7 @@ class CustomDrawer extends StatelessWidget {
     // Small delay to ensure drawer closes smoothly
     Future.delayed(const Duration(milliseconds: 250), () {
       Navigator.pushReplacement(
+        // ignore: use_build_context_synchronously
         context, 
         PageRouteBuilder(
           pageBuilder: (context, animation, secondaryAnimation) => page,
