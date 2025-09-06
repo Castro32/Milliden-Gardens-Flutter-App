@@ -195,104 +195,90 @@ if (!fs.existsSync(uploadsDir)) {
 
 console.log('Uploads directory path:', uploadsDir);
 
-// FIXED CORS configuration
-const allowedOrigins = {
-  development: [
-    'http://localhost:3000',
-    'http://localhost:3001', 
-    'http://localhost:8080',
-    'http://localhost:43013', // Flutter web default
-    'http://127.0.0.1:3000',
-    'http://127.0.0.1:8080',
-    'http://127.0.0.1:43013',
-    /^http:\/\/localhost:\d+$/, // Any localhost port
-    /^http:\/\/127\.0\.0\.1:\d+$/ // Any 127.0.0.1 port
-  ],
-  production: [
-    'https://milliden-gardens.vercel.app',
-    'https://your-flutter-web-domain.com',
-    'https://milliden-gardens-1.onrender.com'
-  ]
-};
-
-// Function to check if origin is allowed (including regex support)
-const isOriginAllowed = (origin: string, allowedOrigins: (string | RegExp)[]) => {
-  return allowedOrigins.some(allowed => {
-    if (allowed instanceof RegExp) {
-      return allowed.test(origin);
-    }
-    return allowed === origin;
-  });
-};
-
-const origins = process.env.NODE_ENV === 'production' 
-  ? allowedOrigins.production 
-  : allowedOrigins.development;
-
-// Enhanced CORS configuration with proper error handling
-const corsOptions = {
-  origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
-    // Allow requests with no origin (mobile apps, Postman, curl, etc.)
-    if (!origin) return callback(null, true);
-    
-    if (isOriginAllowed(origin, origins)) {
-      return callback(null, true);
-    } else {
-      console.log('CORS blocked origin:', origin);
-      console.log('Allowed origins:', origins);
-      return callback(new Error(`Not allowed by CORS: ${origin}`), false);
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization', 
-    'X-Requested-With',
-    'Accept',
-    'Origin',
-    'Cache-Control',
-    'X-File-Name'
-  ],
-  optionsSuccessStatus: 200, // Some legacy browsers choke on 204
-  preflightContinue: false
-};
-
-// Apply CORS middleware FIRST
-app.use(cors(corsOptions));
-
-// Handle preflight requests explicitly
-app.options('*', cors(corsOptions));
-
-// Add additional CORS headers as fallback
+// FIXED CORS configuration - Apply CORS FIRST before any other middleware
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   
-  if (!origin || isOriginAllowed(origin, origins)) {
+  // Define allowed origins (including regex patterns)
+  const allowedOrigins = [
+    'http://localhost:3000',
+    'http://localhost:3001',
+    'http://localhost:8080',
+    'http://localhost:43013',
+    'http://127.0.0.1:3000',
+    'http://127.0.0.1:8080',
+    'http://127.0.0.1:43013',
+    'https://milliden-gardens.vercel.app',
+    'https://your-flutter-web-domain.com'
+  ];
+  
+  // Check if origin is allowed (including localhost ports)
+  const isAllowed = !origin || 
+    allowedOrigins.includes(origin) || 
+    /^http:\/\/localhost:\d+$/.test(origin) ||
+    /^http:\/\/127\.0\.0\.1:\d+$/.test(origin);
+  
+  if (isAllowed) {
     res.header('Access-Control-Allow-Origin', origin || '*');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-File-Name');
   }
   
-  // Handle preflight
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization, Cache-Control, X-File-Name');
+  res.header('Access-Control-Max-Age', '86400'); // 24 hours
+  
+  // Handle preflight requests
   if (req.method === 'OPTIONS') {
-    res.sendStatus(200);
+    console.log(`Preflight request from origin: ${origin}`);
+    res.status(200).end();
     return;
   }
   
   next();
 });
 
+// Alternative CORS package configuration as backup
+app.use(cors({
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    
+    const allowedOrigins = [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'http://localhost:8080', 
+      'http://localhost:43013',
+      'http://127.0.0.1:3000',
+      'http://127.0.0.1:8080',
+      'http://127.0.0.1:43013',
+      'https://milliden-gardens.vercel.app'
+    ];
+    
+    const isAllowed = allowedOrigins.includes(origin) || 
+      /^http:\/\/localhost:\d+$/.test(origin) ||
+      /^http:\/\/127\.0\.0\.1:\d+$/.test(origin);
+    
+    if (isAllowed) {
+      callback(null, true);
+    } else {
+      console.log('CORS blocked origin:', origin);
+      callback(null, false);
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'Authorization', 'Cache-Control', 'X-File-Name'],
+  optionsSuccessStatus: 200,
+  preflightContinue: false
+}));
+
 // Static file serving with CORS headers
 app.use('/uploads', express.static(uploadsDir, {
   setHeaders: (res, filePath) => {
-    // Set CORS headers for static files
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
     
-    // Set proper content type and cache headers
     if (filePath.match(/\.(png|jpg|jpeg|gif|webp)$/i)) {
       res.setHeader('Content-Type', 'image/*');
       res.setHeader('Cache-Control', 'public, max-age=86400');
@@ -322,13 +308,19 @@ app.get('/health', (req, res) => {
   });
 });
 
-// Test endpoint to check CORS
+// CORS test endpoint
 app.get('/test-cors', (req, res) => {
+  console.log('CORS test - Request headers:', {
+    origin: req.headers.origin,
+    'user-agent': req.headers['user-agent'],
+    'access-control-request-method': req.headers['access-control-request-method']
+  });
+  
   res.json({ 
     message: 'CORS is working',
     origin: req.headers.origin,
     method: req.method,
-    headers: req.headers
+    timestamp: new Date().toISOString()
   });
 });
 
@@ -386,6 +378,15 @@ app.get('/test-image/:filename', (req, res) => {
   }
 });
 
+// Basic test endpoint
+app.get('/test', (req, res) => {
+  res.json({ 
+    message: 'Server is working',
+    timestamp: new Date().toISOString(),
+    origin: req.headers.origin
+  });
+});
+
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://fidel:qwerty1234@cluster0.cveawtg.mongodb.net/Milliden?retryWrites=true&w=majority&appName=Cluster0')
   .then(() => console.log('Connected to MongoDB'))
@@ -401,22 +402,11 @@ app.use('/api/admin', adminRoutes);
 app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
   console.error('Error details:', {
     message: err.message,
-    stack: err.stack,
+    stack: process.env.NODE_ENV === 'development' ? err.stack : undefined,
     url: req.url,
     method: req.method,
     origin: req.headers.origin
   });
-  
-  // Handle CORS errors specifically
-  if (err.message && err.message.includes('Not allowed by CORS')) {
-    res.status(403).json({
-      error: 'CORS Error',
-      message: 'Origin not allowed',
-      origin: req.headers.origin,
-      allowedOrigins: origins
-    });
-    return;
-  }
   
   res.status(500).json({ 
     message: 'Server error', 
@@ -431,7 +421,8 @@ app.use('*', (req, res) => {
     message: `Cannot ${req.method} ${req.originalUrl}`,
     availableEndpoints: [
       '/health',
-      '/test-cors', 
+      '/test-cors',
+      '/test',
       '/api/rooms',
       '/api/bookings',
       '/uploads/*'
@@ -440,8 +431,8 @@ app.use('*', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`Uploads served at: http://localhost:${PORT}/uploads/`);
-  console.log(`Allowed origins:`, origins);
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📁 Uploads served at: http://localhost:${PORT}/uploads/`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`✅ CORS enabled for development origins`);
 });
